@@ -4,6 +4,9 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
+const methodOverride = require('method-override');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -22,8 +25,49 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.set('trust proxy', true);
+app.set('trust proxy', 1); // trust first proxy
+
+app.use(methodOverride('_method'));
+
+app.use(
+  session({
+    store: new FileStore({
+      path: path.join(__dirname, '/tmp'),
+      encrypt: true
+    }),
+    secret: 'safesecret',
+    resave: true,
+    saveUninitialized: true,
+    name: 'mysession'
+  })
+);
+
+console.log('session');
+console.log(session);
+// session.connected = true;
+// console.log(session.connected);
+
 app.use('/', index);
 app.use('/users', users);
+
+// app.use('/api', function(req, res, next) {
+//   req.session.connected = true;
+//   if (req.session.connected) {
+//     return next();
+//   } else {
+//     return res.redirect('/login');
+//   }
+// });
+
+app.use('/logout', (req, res) => {
+  if (req.session.connected) {
+    req.session.destroy();
+    res.render('index', { disconnect: "You've been disconnected" });
+  } else {
+    res.redirect('/login');
+  }
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
