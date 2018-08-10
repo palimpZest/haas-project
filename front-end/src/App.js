@@ -39,7 +39,9 @@ class App extends Component {
         <div className="panel panel-default">
           <div className="panel-heading">
             <h3 className="panel-title">
-              hashCATALOG &nbsp;
+              hashCATALOG
+              <br />
+              <br />
               {localStorage.getItem('jwtToken') && (
                 <div>
                   <button className="btn btn-warning">

@@ -30,19 +30,19 @@ class DummyHash extends Component {
     return (
       <div className="container">
         <h2>Here are your Dummy Hashes!</h2>
-        <button className="btn btn-danger">
-          <Link to={`/`}>Back</Link>
-        </button>
-        <br />
         <br />
         {Object.values(dummyHash).map((item, index) => (
-          <div>
-            <span key={index}>
+          <div key={index}>
+            <span>
               {item.name} {item.hash}
             </span>
             <br />
           </div>
         ))}
+        <br />
+        <button className="btn btn-danger">
+          <Link to={`/`}>Back</Link>
+        </button>
       </div>
     );
   }

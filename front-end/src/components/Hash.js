@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 const API_URL = 'http://localhost:3000/';
 
@@ -24,12 +25,11 @@ class Hash extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-
     const { data, algorithm, iteration } = this.state;
-
     axios
       .post(`${API_URL}calculateHash`, { data, algorithm, iteration })
       .then(result => {
+        console.log('result');
         console.log(result);
         this.props.history.push('/');
       });
@@ -40,10 +40,10 @@ class Hash extends Component {
     return (
       <div className="container">
         <h2>Create your Hash!</h2>
+        <br />
         <form className="form-signin" onSubmit={this.onSubmit}>
-          <h2 className="form-signin-heading">Register</h2>
-          <label htmlFor="inputEmail" className="sr-only">
-            Email address
+          <label htmlFor="inputData" className="sr-only">
+            Data
           </label>
           <input
             type="text"
@@ -54,22 +54,34 @@ class Hash extends Component {
             onChange={this.onChange}
             required
           />
-          <label htmlFor="inputData" className="sr-only">
-            Data
+          <label htmlFor="inputAlgorithm" className="sr-only">
+            Algorithm
           </label>
-          <input
-            type="text"
+          <select
             className="form-control"
-            placeholder="algorithm"
             name="algorithm"
             value={algorithm}
             onChange={this.onChange}
             required
-          />
+          >
+            <option>Select a method</option>
+            <option name="md5" value="md5">
+              MD5
+            </option>
+            <option name="sha1" value="sha1">
+              SHA1
+            </option>
+            <option name="sha256" value="sha256">
+              SHA256
+            </option>
+          </select>
+          <label htmlFor="inputIteration" className="sr-only">
+            Iteration
+          </label>
           <input
             type="text"
             className="form-control"
-            placeholder="iteration"
+            placeholder="Number of iterations"
             name="iteration"
             value={iteration}
             onChange={this.onChange}
@@ -79,6 +91,10 @@ class Hash extends Component {
             Hash this data
           </button>
         </form>
+        <br />
+        <button className="btn btn-danger">
+          <Link to={`/`}>Back</Link>
+        </button>
       </div>
     );
   }
