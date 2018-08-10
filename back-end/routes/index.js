@@ -16,7 +16,6 @@ router.get(
     }
   },
   function (req, res, next) {
-    console.log('kdfjskdfs')
     res.send('Welcome, create an account or login')
   }
 )
