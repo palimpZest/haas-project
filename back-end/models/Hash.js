@@ -28,17 +28,27 @@ var HashSchema = new Schema({
 })
 
 HashSchema.pre('save', function (next) {
-  var hash = this
+  let hash = this
   if (hash.algorithm === 'sha256') {
     hash.hash = SHA256(hash.data)
+    for (let i = 0; i < hash.iteration; i++) {
+      hash.hash = SHA256(hash.hash)
+    }
     next()
   } else if (hash.algorithm === 'sha1') {
     hash.hash = SHA1(hash.data)
+    for (let i = 0; i < hash.iteration; i++) {
+      hash.hash = SHA1(hash.hash)
+    }
     next()
   } else if (hash.algorithm === 'md5') {
     hash.hash = MD5(hash.data)
+    for (let i = 0; i < hash.iteration; ++i) {
+      hash.hash = MD5(hash.hash)
+    }
     next()
   } else {
+    console.log('Error: method not found')
     return next()
   }
 })
